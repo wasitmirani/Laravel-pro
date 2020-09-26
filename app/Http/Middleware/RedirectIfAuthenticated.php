@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 
 class RedirectIfAuthenticated
 {
@@ -22,6 +24,12 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $token=Str::random(20);
+                if(Auth::check())
+                {
+  User::where('id',Auth::user()->id)->update(['api_token'=>$token]);
+                }
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }
