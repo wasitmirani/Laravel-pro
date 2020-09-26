@@ -20,4 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/categories',[CategoryController::class,'show']);
+Route::group(['prefix' => 'categories',], function() {
+Route::get('/show',[CategoryController::class,'show']);
+Route::post("/store",[CategoryController::class,'store']);
+});

@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "bootstrap-vue": "^2.17.3",
+        "vue-initials-img": "^1.0.4",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.4.4",
         "vuesax": "^3.12.2"

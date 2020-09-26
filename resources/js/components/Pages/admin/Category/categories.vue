@@ -115,11 +115,14 @@
                                         </label>
                                     </th>
                                     <th class="pr-0" style="width: 50px">
-                                        authors
+                                        Select All
                                     </th>
                                     <th style="min-width: 200px"></th>
-                                    <th style="min-width: 150px">company</th>
-                                    <th style="min-width: 150px">progress</th>
+                                    <th style="min-width: 150px">Name</th>
+                                    <th style="min-width: 150px">Status</th>
+                                    <th style="min-width: 150px">
+                                        Descripation
+                                    </th>
                                     <th
                                         class="pr-0 text-right"
                                         style="min-width: 150px"
@@ -129,7 +132,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr
+                                    v-for="item in categories.data"
+                                    :key="item.id"
+                                >
                                     <td class="pl-0">
                                         <label
                                             class="checkbox checkbox-lg checkbox-inline"
@@ -143,11 +149,18 @@
                                             class="symbol symbol-50 symbol-light mt-1"
                                         >
                                             <span class="symbol-label">
-                                                <img
-                                                    src="assets/media/svg/avatars/001-boy.svg"
-                                                    class="h-75 align-self-end"
-                                                    alt=""
-                                                />
+                                                <p v-if="item.thumbnail != ''">
+                                                    <vue-initials-img
+                                                        :name="item.name"
+                                                    />
+                                                </p>
+                                                <p v-else>
+                                                    <img
+                                                        src="assets/media/svg/avatars/001-boy.svg"
+                                                        class="h-75 align-self-end"
+                                                        alt=""
+                                                    />
+                                                </p>
                                             </span>
                                         </div>
                                     </td>
@@ -155,23 +168,23 @@
                                         <a
                                             href="#"
                                             class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                                            >Brad Simmons</a
-                                        >
-                                        <span
+                                        ></a>
+                                        <!-- <span
                                             class="text-muted font-weight-bold text-muted d-block"
                                             >HTML, JS, ReactJS</span
-                                        >
+                                        > -->
                                     </td>
                                     <td>
-                                        <span
-                                            class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                                            >Intertico</span
+                                        <div
+                                            class="d-flex align-items-center justify-content-between mb-2"
                                         >
-                                        <span
-                                            class="text-muted font-weight-bold"
-                                            >Web, UI/UX Design</span
-                                        >
+                                            <span
+                                                class="text-dark-75 font-weight-bolder d-block font-size-lg"
+                                                >{{ item.name }}</span
+                                            >
+                                        </div>
                                     </td>
+
                                     <td>
                                         <div
                                             class="d-flex flex-column w-100 mr-2"
@@ -179,28 +192,28 @@
                                             <div
                                                 class="d-flex align-items-center justify-content-between mb-2"
                                             >
-                                                <span
-                                                    class="text-muted mr-2 font-size-sm font-weight-bold"
-                                                    >65%</span
+                                                <b-badge
+                                                    pill
+                                                    variant="success"
+                                                    v-if="item.status == 1"
+                                                    >Active</b-badge
                                                 >
-                                                <span
-                                                    class="text-muted font-size-sm font-weight-bold"
-                                                    >Progress</span
+                                                <b-badge
+                                                    pill
+                                                    variant="danger"
+                                                    v-if="item.status == 0"
+                                                    >Unactivated</b-badge
                                                 >
-                                            </div>
-                                            <div
-                                                class="progress progress-xs w-100"
-                                            >
-                                                <div
-                                                    class="progress-bar bg-danger"
-                                                    role="progressbar"
-                                                    style="width: 65%"
-                                                    aria-valuenow="50"
-                                                    aria-valuemin="0"
-                                                    aria-valuemax="100"
-                                                ></div>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="text-dark-75 font-weight-bolder d-block font-size-lg"
+                                            >{{
+                                                item.des.substring(0, 10)
+                                            }}....</span
+                                        >
                                     </td>
                                     <td class="pr-0 text-right"></td>
                                 </tr>
@@ -271,6 +284,19 @@
                                     drop-placeholder="Drop file here..."
                                 ></b-form-file>
                             </b-form-group>
+                            <b-form-group
+                                id="input-group-1"
+                                label="Category Descripation"
+                                label-for="input-1"
+                            >
+                                <b-form-textarea
+                                    id="textarea"
+                                    v-model="form.des"
+                                    placeholder="Enter something..."
+                                    rows="3"
+                                    max-rows="6"
+                                ></b-form-textarea>
+                            </b-form-group>
                         </div>
                         <div class="modal-footer">
                             <button
@@ -296,17 +322,45 @@ export default {
     data() {
         return {
             is_editmode: false,
+            auth_user: {},
+            categories: {},
             form: {
-                email: "",
                 name: "",
+                des: "",
                 thumbnail: null
             },
             show: true
         };
     },
     methods: {
+        get_categories() {
+            axios
+                .get(
+                    this.$host_apiurl +
+                        "/categories/show?token=" +
+                        this.auth_user.api_token
+                )
+                .then(res => {
+                    this.categories = res.data;
+                    console.log(res.data);
+                });
+        },
         onSubmit(evt) {
             evt.preventDefault();
+            let frmdata = new FormData();
+            frmdata.append("name", this.form.name);
+            frmdata.append("des", this.form.des);
+            frmdata.append("thumbnail", this.form.thumbnail);
+            axios
+                .post(
+                    this.$host_apiurl +
+                        "/categories/store?token=" +
+                        this.auth_user.api_token,
+                    frmdata
+                )
+                .then(res => {
+                    alert("success");
+                });
             alert(JSON.stringify(this.form));
         },
         open_modal() {
@@ -315,6 +369,8 @@ export default {
     },
     mounted() {
         this.$Progress.finish();
+        this.auth_user = this.$attrs["authuser"];
+        this.get_categories();
     }
 };
 </script>

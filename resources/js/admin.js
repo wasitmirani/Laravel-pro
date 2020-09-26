@@ -10,12 +10,9 @@ window.Vue = require("vue");
 import router from "./admin_router";
 import VueProgressBar from "vue-progressbar";
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
-// import Vuesax from "vuesax";
+import VueInitialsImg from "vue-initials-img";
 
-// import "vuesax/dist/vuesax.css"; //Vuesax styles
-// Vue.use(Vuesax, {
-//     // options here
-// });
+Vue.use(VueInitialsImg);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 Vue.use(VueProgressBar, {
@@ -45,6 +42,8 @@ Vue.use(VueProgressBar, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.prototype.$hosturl = window.location.origin;
+Vue.prototype.$host_apiurl = window.location.origin + "/api";
 const app = new Vue({
     el: "#admin_app",
     router

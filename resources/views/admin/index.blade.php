@@ -2,5 +2,5 @@
 
 @section('content')
  <vue-progress-bar></vue-progress-bar>
-<router-view></router-view>
+<router-view :AuthUser="{{  Auth::user() }}"></router-view>
 @endsection
