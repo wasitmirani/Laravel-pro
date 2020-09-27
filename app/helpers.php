@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\File;
     }
     function single_file_delete($path,$filename){
 
- File::delete($path.'/'.$filename);
+        File::delete($path.'/'.$filename);
     }
 
 

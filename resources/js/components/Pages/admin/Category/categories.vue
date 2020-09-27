@@ -53,6 +53,7 @@
                                 class="form-control"
                                 placeholder="Search"
                                 type="search"
+                                v-model="query"
                                 id="example-search-input"
                             />
                         </div>
@@ -240,7 +241,10 @@
                                             ></i
                                         ></a>
                                         |
-                                        <a href="#">
+                                        <a
+                                            role="button"
+                                            @click="delete_record(item)"
+                                        >
                                             <i
                                                 class="fas fa-trash text-danger"
                                             ></i
@@ -388,6 +392,7 @@ export default {
         return {
             is_editmode: false,
             is_dataload: false,
+            query: "",
             img_show_url: "",
             edit_id: "",
             auth_user: {},
@@ -406,6 +411,21 @@ export default {
             axios
                 .get(
                     this.$host_apiurl +
+                        "/categories/filter?query" +
+                        this.query +
+                        "&&token=" +
+                        this.auth_user.api_token
+                )
+                .then(res => {
+                    this.categories = res.data;
+                    this.is_dataload = false;
+                });
+        },
+        get_categories() {
+            this.is_dataload = true;
+            axios
+                .get(
+                    this.$host_apiurl +
                         "/categories/show?token=" +
                         this.auth_user.api_token
                 )
@@ -413,6 +433,36 @@ export default {
                     this.categories = res.data;
                     this.is_dataload = false;
                 });
+        },
+        delete_record(item) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then(result => {
+                if (result.isConfirmed) {
+                    axios
+                        .get(
+                            this.$host_apiurl +
+                                "/categories/delete/" +
+                                item.id +
+                                "?token=" +
+                                this.auth_user.api_token
+                        )
+                        .then(res => {
+                            Swal.fire(
+                                "Deleted!",
+                                "Your file has been deleted.",
+                                "success"
+                            );
+                            this.get_categories();
+                        });
+                }
+            });
         },
         edit_mode(item) {
             this.img_show_url = "";
@@ -496,9 +546,9 @@ export default {
         }
     },
     mounted() {
-        this.$Progress.finish();
         this.auth_user = this.$attrs["authuser"];
         this.get_categories();
+        this.$Progress.finish();
     }
 };
 </script>

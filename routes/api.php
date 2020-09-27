@@ -24,4 +24,7 @@ Route::group(['prefix' => 'categories',], function() {
 Route::get('/show',[CategoryController::class,'show']);
 Route::post("/store",[CategoryController::class,'store']);
 Route::post("/update",[CategoryController::class,'update']);
+Route::get("/delete/{id}",[CategoryController::class,'delete']);
+Route::get('/filter',[CategoryController::class,'filter']);
+
 });
