@@ -23,4 +23,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'categories',], function() {
 Route::get('/show',[CategoryController::class,'show']);
 Route::post("/store",[CategoryController::class,'store']);
+Route::post("/update",[CategoryController::class,'update']);
 });

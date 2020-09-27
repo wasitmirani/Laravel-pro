@@ -88,7 +88,7 @@
 						<div class="login-form">
                             <!--begin::Form-->
                              <form class="form" method="POST" action="{{ route('login') }}">
-                        @csrf
+                           @csrf
 
 								<!--begin::Title-->
 								<div class="pb-5 pb-lg-15">
@@ -125,7 +125,7 @@
 								<!--begin::Action-->
 								<div class="pb-lg-0 pb-5">
 									<button type="submit" id="kt_login_singin_form_submit_button" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3">Sign In</button>
-									
+
 
 								</div>
 								<!--end::Action-->

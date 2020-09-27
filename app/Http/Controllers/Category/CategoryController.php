@@ -33,6 +33,32 @@ class CategoryController extends Controller
             }
     }
 
+    public function update(Request $request){
+         if($this->verifed){
+                  $duplicate=Category::where('name',$request->name)->get();
+                  $category=Category::where('id',$request->id)->first();
+
+                  global $file_name;
+                  if($request->thumbnail=="" || $request->thumbnail==null){
+                    $file_name= $category->thumbnail;
+                  }
+                  else {
+                      single_file_delete("images/category/",$category->thumbnail);
+                      $file_name= single_image_upload($request,'images/category/',$request->name);
+                  }
+                  if($duplicate->count()>0)
+                    return response()->json(['status'=>'This record already exsits'],422);
+                    Category::where('id',$request->id)->update([
+                        'name'=>$request->name,
+                        'des'=>$request->des,
+                        'thumbnail'=>$file_name,
+                    ]);
+                    return response()->json(['status'=>'This record successfuly saved'],200);
+              }
+            else {
+                return abort(401);
+            }
+    }
     public function store(Request $request){
               if($this->verifed){
                   $duplicate=Category::where('name',$request->name)->get();
@@ -41,7 +67,7 @@ class CategoryController extends Controller
                     Category::create([
                         'name'=>$request->name,
                         'des'=>$request->des,
-                        'thumbnail'=>single_image_upload($request,'images/category/'),
+                        'thumbnail'=>single_image_upload($request,'images/category/',$request->name),
                     ]);
                     return response()->json(['status'=>'This record successfuly saved'],200);
               }

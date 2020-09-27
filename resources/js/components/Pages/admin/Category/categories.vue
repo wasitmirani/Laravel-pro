@@ -289,6 +289,7 @@
                     </div>
                     <div
                         class="row mt-4 d-flex justify-content-center text-center"
+                        v-if="is_editmode"
                     >
                         <p v-if="img_show_url == null || img_show_url == ''">
                             <vue-initials-img :name="this.form.name" />
@@ -370,7 +371,7 @@
                                 v-if="!is_editmode"
                                 >Save</b-button
                             >
-                            <b-button type="submit" variant="primary" v-else
+                            <b-button type="submit" variant="success" v-else
                                 >Update</b-button
                             >
                         </div>
@@ -425,38 +426,71 @@ export default {
             evt.preventDefault();
             let frmdata = new FormData();
             frmdata.append("name", this.form.name);
+            frmdata.append("id", this.edit_id);
             frmdata.append("des", this.form.des);
             frmdata.append("thumbnail", this.form.thumbnail);
-            axios
-                .post(
-                    this.$host_apiurl +
-                        "/categories/store?token=" +
-                        this.auth_user.api_token,
-                    frmdata
-                )
-                .then(res => {
-                    $("#modal_open").modal("hide");
-                    this.get_categories();
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Category name has been saved",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                })
-                .catch(er => {
-                    if (er.response.status == 422) {
+            if (!this.is_editmode) {
+                axios
+                    .post(
+                        this.$host_apiurl +
+                            "/categories/store?token=" +
+                            this.auth_user.api_token,
+                        frmdata
+                    )
+                    .then(res => {
                         $("#modal_open").modal("hide");
+                        this.get_categories();
                         Swal.fire({
-                            title: "Duplicate",
-                            text: "This Category has already been taken.",
-                            icon: "warning"
+                            position: "top-center",
+                            icon: "success",
+                            title: "Category name has been saved",
+                            showConfirmButton: false,
+                            timer: 1500
                         });
-                    }
-                });
+                    })
+                    .catch(er => {
+                        if (er.response.status == 422) {
+                            $("#modal_open").modal("hide");
+                            Swal.fire({
+                                title: "Duplicate",
+                                text: "This Category has already been taken.",
+                                icon: "warning"
+                            });
+                        }
+                    });
+            } else {
+                axios
+                    .post(
+                        this.$host_apiurl +
+                            "/categories/update?token=" +
+                            this.auth_user.api_token,
+                        frmdata
+                    )
+                    .then(res => {
+                        $("#modal_open").modal("hide");
+                        this.get_categories();
+                        Swal.fire({
+                            position: "top-center",
+                            icon: "success",
+                            title: "Category name has been update",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                    .catch(er => {
+                        if (er.response.status == 422) {
+                            $("#modal_open").modal("hide");
+                            Swal.fire({
+                                title: "Duplicate",
+                                text: "This Category has already been taken.",
+                                icon: "warning"
+                            });
+                        }
+                    });
+            }
         },
         open_modal() {
+            this.is_editmode = false;
             this.form = {};
             $("#modal_open").modal("show");
         }
