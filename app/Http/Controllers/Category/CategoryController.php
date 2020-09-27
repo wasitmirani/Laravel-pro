@@ -12,7 +12,8 @@ class CategoryController extends Controller
     //
     private $verifed=false;
      public function __construct()
-    {   $token=request('token');
+    {
+         $token=request('token');
         $check_user=User::where('api_token',$token)->first();
 
         if($check_user){
