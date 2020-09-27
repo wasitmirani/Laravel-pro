@@ -35,25 +35,20 @@ class CategoryController extends Controller
 
     public function store(Request $request){
               if($this->verifed){
+                  $duplicate=Category::where('name',$request->name)->get();
+                  if($duplicate->count()>0)
+                    return response()->json(['status'=>'This record already exsits'],422);
                     Category::create([
                         'name'=>$request->name,
                         'des'=>$request->des,
-                        'thumbnail'=>$this->single_image_upload($request,'images/category/'),
+                        'thumbnail'=>single_image_upload($request,'images/category/'),
                     ]);
+                    return response()->json(['status'=>'This record successfuly saved'],200);
               }
             else {
                 return abort(401);
             }
     }
 
-    public function single_image_upload($request,$path){
-        global $filename;
 
-         if ($request->hasFile('thumbnail')) {
-              $filename = time().'.'.$request->thumbnail->extension();
-
-              $request->thumbnail->move(public_path($path), $filename);
-        }
-        return  $filename;
-    }
 }

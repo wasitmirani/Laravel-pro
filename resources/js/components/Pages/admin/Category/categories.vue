@@ -132,6 +132,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <b-overlay :show="is_dataload" no-wrap>
+                                </b-overlay>
+
                                 <tr
                                     v-for="item in categories.data"
                                     :key="item.id"
@@ -149,14 +152,26 @@
                                             class="symbol symbol-50 symbol-light mt-1"
                                         >
                                             <span class="symbol-label">
-                                                <p v-if="item.thumbnail != ''">
+                                                <p
+                                                    v-if="
+                                                        item.thumbnail ==
+                                                            null ||
+                                                            item.thumbnail == ''
+                                                    "
+                                                >
                                                     <vue-initials-img
                                                         :name="item.name"
                                                     />
                                                 </p>
                                                 <p v-else>
                                                     <img
-                                                        src="assets/media/svg/avatars/001-boy.svg"
+                                                        :src="
+                                                            '' +
+                                                                $host_url +
+                                                                '/images/category/' +
+                                                                item.thumbnail
+                                                        "
+                                                        style="width: 60px"
                                                         class="h-75 align-self-end"
                                                         alt=""
                                                     />
@@ -215,7 +230,22 @@
                                             }}....</span
                                         >
                                     </td>
-                                    <td class="pr-0 text-right"></td>
+                                    <td class="pr-0 text-right">
+                                        <a
+                                            role="button"
+                                            @click="edit_mode(item)"
+                                        >
+                                            <i
+                                                class="fas fa-edit text-primary"
+                                            ></i
+                                        ></a>
+                                        |
+                                        <a href="#">
+                                            <i
+                                                class="fas fa-trash text-danger"
+                                            ></i
+                                        ></a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -256,6 +286,34 @@
                         >
                             <i aria-hidden="true" class="ki ki-close"></i>
                         </button>
+                    </div>
+                    <div
+                        class="row mt-4 d-flex justify-content-center text-center"
+                    >
+                        <p v-if="img_show_url == null || img_show_url == ''">
+                            <vue-initials-img :name="this.form.name" />
+                        </p>
+                        <p v-else>
+                            <a
+                                :href="
+                                    $host_url +
+                                        '/images/category/' +
+                                        img_show_url
+                                "
+                            >
+                                <img
+                                    :src="
+                                        '' +
+                                            $host_url +
+                                            '/images/category/' +
+                                            img_show_url
+                                    "
+                                    style="width:250px; height:350;"
+                                    class="h-75 align-self-end"
+                                    alt=""
+                                />
+                            </a>
+                        </p>
                     </div>
                     <b-form @submit="onSubmit" v-if="show">
                         <div class="modal-body">
@@ -306,8 +364,14 @@
                             >
                                 Close
                             </button>
-                            <b-button type="submit" variant="primary"
+                            <b-button
+                                type="submit"
+                                variant="primary"
+                                v-if="!is_editmode"
                                 >Save</b-button
+                            >
+                            <b-button type="submit" variant="primary" v-else
+                                >Update</b-button
                             >
                         </div>
                     </b-form>
@@ -322,6 +386,9 @@ export default {
     data() {
         return {
             is_editmode: false,
+            is_dataload: false,
+            img_show_url: "",
+            edit_id: "",
             auth_user: {},
             categories: {},
             form: {
@@ -334,6 +401,7 @@ export default {
     },
     methods: {
         get_categories() {
+            this.is_dataload = true;
             axios
                 .get(
                     this.$host_apiurl +
@@ -342,8 +410,16 @@ export default {
                 )
                 .then(res => {
                     this.categories = res.data;
-                    console.log(res.data);
+                    this.is_dataload = false;
                 });
+        },
+        edit_mode(item) {
+            this.img_show_url = "";
+            (this.is_editmode = true), $("#modal_open").modal("show");
+            this.edit_id = item.id;
+            this.form.name = item.name;
+            this.form.des = item.des;
+            this.img_show_url = item.thumbnail;
         },
         onSubmit(evt) {
             evt.preventDefault();
@@ -359,11 +435,29 @@ export default {
                     frmdata
                 )
                 .then(res => {
-                    alert("success");
+                    $("#modal_open").modal("hide");
+                    this.get_categories();
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Category name has been saved",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+                .catch(er => {
+                    if (er.response.status == 422) {
+                        $("#modal_open").modal("hide");
+                        Swal.fire({
+                            title: "Duplicate",
+                            text: "This Category has already been taken.",
+                            icon: "warning"
+                        });
+                    }
                 });
-            alert(JSON.stringify(this.form));
         },
         open_modal() {
+            this.form = {};
             $("#modal_open").modal("show");
         }
     },

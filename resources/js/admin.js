@@ -11,7 +11,12 @@ import router from "./admin_router";
 import VueProgressBar from "vue-progressbar";
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import VueInitialsImg from "vue-initials-img";
+import Swal from "sweetalert2";
+import VueContentPlaceholders from "vue-content-placeholders";
 
+window.Swal = Swal;
+
+Vue.use(VueContentPlaceholders);
 Vue.use(VueInitialsImg);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
@@ -42,7 +47,7 @@ Vue.use(VueProgressBar, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.prototype.$hosturl = window.location.origin;
+Vue.prototype.$host_url = window.location.origin;
 Vue.prototype.$host_apiurl = window.location.origin + "/api";
 const app = new Vue({
     el: "#admin_app",
