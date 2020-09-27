@@ -102,7 +102,8 @@ class CategoryController extends Controller
     public function filter(){
         if($this->verifed){
             $query=request('query');
-        $data==Category::where('name', 'like', '%' . Input::get('name') . '%')->get();;
+        $data=Category::where('name', 'like', '%' .  $query . '%')->latest()->paginate(env('PER_PAGE'));
+         return response()->json($data);
          }else {
                 return abort(401);
          }

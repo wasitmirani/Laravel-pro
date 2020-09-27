@@ -14,6 +14,9 @@ import VueInitialsImg from "vue-initials-img";
 import Swal from "sweetalert2";
 import VueContentPlaceholders from "vue-content-placeholders";
 
+// window._ = require("lodash");
+
+window._ = require("lodash");
 window.Swal = Swal;
 
 Vue.use(VueContentPlaceholders);

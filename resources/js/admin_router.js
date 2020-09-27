@@ -16,6 +16,11 @@ const routes = [
         path: "/categories",
         component: require("./components/Pages/admin/Category/categories.vue")
             .default
+    },
+    {
+        path: "/sub/categories",
+        component: require("./components/Pages/admin/Category/subcategories.vue")
+            .default
     }
 ];
 

@@ -53,6 +53,7 @@
                                 class="form-control"
                                 placeholder="Search"
                                 type="search"
+                                v-on:keyup="searchAfterDebounce"
                                 v-model="query"
                                 id="example-search-input"
                             />
@@ -387,6 +388,7 @@
 </template>
 
 <script>
+window._ = require("lodash");
 export default {
     data() {
         return {
@@ -406,6 +408,34 @@ export default {
         };
     },
     methods: {
+        //asyncdata
+        searchAfterDebounce: _.debounce(
+            function() {
+                this.is_dataload = true;
+                this.search();
+            },
+            500 // 500 milliseconds
+        ),
+
+        //search data
+        search() {
+            if (this.query.length > 2) {
+                axios
+                    .get(
+                        this.$host_apiurl +
+                            "/categories/filter?query=" +
+                            this.query +
+                            "&&token=" +
+                            this.auth_user.api_token
+                    )
+                    .then(response => {
+                        this.is_dataload = false;
+                        this.categories = response.data;
+                    });
+            } else {
+                this.get_categories();
+            }
+        },
         get_categories() {
             this.is_dataload = true;
             axios
