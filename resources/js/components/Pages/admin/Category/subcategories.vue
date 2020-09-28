@@ -220,10 +220,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel" v-if="!is_editmode">
-              Create New Category
+              Create New Sub Category
             </h5>
             <h5 class="modal-title" id="exampleModalLabel" v-else>
-              Create Update Category
+              Create Update Sub Category
             </h5>
             <button
               type="button"
@@ -272,13 +272,12 @@
                 label="Category Thumbnail"
                 label-for="input-1"
               >
-                <b-form-select v-model="selected" class="mb-3">
-                  <b-form-select-option :value="null"
-                    >Please select an option</b-form-select-option
-                  >
-                  <b-form-select-option value="a"
-                    >Option A</b-form-select-option
-                  >
+                <b-form-select v-model="form.category" class="mb-3">
+                  <div v-for="item in categories" :key="item.id">
+                    <b-form-select-option :value="item.id">{{
+                      item.name
+                    }}</b-form-select-option>
+                  </div>
                 </b-form-select>
               </b-form-group>
 
@@ -340,6 +339,7 @@ export default {
       edit_id: "",
       auth_user: {},
       subcategories: {},
+      categories: {},
       form: {
         name: "",
         des: "",
@@ -512,6 +512,17 @@ export default {
       this.form = {};
       $("#modal_open").modal("show");
     },
+    get_categories() {
+      axios
+        .get(
+          this.$host_apiurl +
+            "/subcategories/get/categories?token=" +
+            this.auth_user.api_token
+        )
+        .then((res) => {
+          this.categories = res.data;
+        });
+    },
   },
   mounted() {
     $("#kt_select2_1").select2({
@@ -520,7 +531,9 @@ export default {
 
     this.auth_user = this.$attrs["authuser"];
     this.get_subcategories();
+
     this.$Progress.finish();
+    this.get_categories();
   },
 };
 </script>

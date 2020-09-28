@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Category;
 
 use App\Models\User;
+use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
