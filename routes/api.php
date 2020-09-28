@@ -32,7 +32,7 @@ Route::get('/filter',[CategoryController::class,'filter']);
 
 
 Route::group(['prefix' => 'subcategories',], function() {
-    Route::get('/get/categories',[SubCategoryController::class,'show']);
+    Route::get('/get/categories',[SubCategoryController::class,'getcategories']);
 Route::get('/show',[SubCategoryController::class,'show']);
 Route::post("/store",[SubCategoryController::class,'store']);
 Route::post("/update",[SubCategoryController::class,'update']);

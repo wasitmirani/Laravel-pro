@@ -23,6 +23,16 @@ class SubCategoryController extends Controller
 
     }
 
+    public function getcategories(){
+            if($this->verifed){
+               $categories=Category::latest()->get();
+
+               return response()->json($categories);
+            }
+            else {
+                return abort(401);
+            }
+    }
     public function show(){
             if($this->verifed){
                $categories=SubCategory::latest()->paginate(env('PER_PAGE'));
