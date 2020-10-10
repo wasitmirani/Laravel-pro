@@ -32,7 +32,7 @@ Route::get('/filter',[CategoryController::class,'filter']);
 
 
 Route::group(['prefix' => 'subcategories',], function() {
-    Route::get('/get/categories',[SubCategoryController::class,'getcategories']);
+Route::get('/get/categories',[SubCategoryController::class,'getcategories']);
 Route::get('/show',[SubCategoryController::class,'show']);
 Route::post("/store",[SubCategoryController::class,'store']);
 Route::post("/update",[SubCategoryController::class,'update']);
@@ -40,3 +40,15 @@ Route::get("/delete/{id}",[SubCategoryController::class,'delete']);
 Route::get('/filter',[SubCategoryController::class,'filter']);
 
 });
+
+
+Route::group(['prefix' => 'users',], function() {
+Route::get('/all/',[SubCategoryController::class,'getcategories']);
+Route::get('/show',[SubCategoryController::class,'show']);
+Route::post("/store",[SubCategoryController::class,'store']);
+Route::post("/update",[SubCategoryController::class,'update']);
+Route::get("/delete/{id}",[SubCategoryController::class,'delete']);
+Route::get('/filter',[SubCategoryController::class,'filter']);
+
+});
+
