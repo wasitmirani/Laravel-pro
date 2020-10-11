@@ -14,6 +14,8 @@ import VueInitialsImg from "vue-initials-img";
 import Swal from "sweetalert2";
 import VueContentPlaceholders from "vue-content-placeholders";
 
+Vue.component("pagination", require("laravel-vue-pagination"));
+
 // window._ = require("lodash");
 
 window._ = require("lodash");

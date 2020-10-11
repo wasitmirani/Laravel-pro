@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Category\CategoryController;
-use App\Http\Controllers\Category\SubCategoryController;
+use App\Http\Controllers\Panel\User\RoleController;
+use App\Http\Controllers\Panel\User\UserController;
+use App\Http\Controllers\Panel\Category\CategoryController;
+use App\Http\Controllers\Panel\Category\SubCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +45,23 @@ Route::get('/filter',[SubCategoryController::class,'filter']);
 
 
 Route::group(['prefix' => 'users',], function() {
-Route::get('/all/',[SubCategoryController::class,'getcategories']);
-Route::get('/show',[SubCategoryController::class,'show']);
-Route::post("/store",[SubCategoryController::class,'store']);
-Route::post("/update",[SubCategoryController::class,'update']);
-Route::get("/delete/{id}",[SubCategoryController::class,'delete']);
-Route::get('/filter',[SubCategoryController::class,'filter']);
+
+Route::get('/all',[UserController::class,'all']);
+Route::post("/store",[UserController::class,'store']);
+Route::post("/update",[UserController::class,'update']);
+Route::get("/delete/{id}",[UserController::class,'delete']);
+Route::get('/filter',[UserController::class,'filter']);
+
+});
+
+
+Route::group(['prefix' => 'role',], function() {
+
+Route::get('/all',[RoleController::class,'all']);
+Route::post("/store",[RoleController::class,'store']);
+Route::post("/update",[RoleController::class,'update']);
+Route::get("/delete/{id}",[RoleController::class,'delete']);
+Route::get('/filter',[RoleController::class,'filter']);
 
 });
 

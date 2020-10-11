@@ -12,6 +12,10 @@ const routes = [
         path: "/users",
         component: require("./components/Pages/admin/User/Users.vue").default
     },
+   {
+        path: "/roles",
+        component: require("./components/Pages/admin/User/roles.vue").default
+    },
     {
         path: "/categories",
         component: require("./components/Pages/admin/Category/categories.vue")

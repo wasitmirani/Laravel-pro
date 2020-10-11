@@ -5,8 +5,9 @@
 	<!--begin::Head-->
 	<head><base href="../../../../">
 		<meta charset="utf-8" />
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-      <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <title>@yiedl('title')</title>
     <!-- MINIFIED -->
