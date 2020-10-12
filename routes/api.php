@@ -44,7 +44,7 @@ Route::get('/filter',[SubCategoryController::class,'filter']);
 });
 
 
-Route::group(['prefix' => 'users',], function() {
+Route::group(['prefix' => 'user',], function() {
 
 Route::get('/all',[UserController::class,'all']);
 Route::post("/store",[UserController::class,'store']);

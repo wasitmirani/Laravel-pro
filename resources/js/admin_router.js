@@ -2,8 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
-const routes = [
-    {
+const routes = [{
         path: "/",
         component: require("./components/Pages/admin/Dashboard/Dashboard.vue")
             .default
@@ -12,7 +11,11 @@ const routes = [
         path: "/users",
         component: require("./components/Pages/admin/User/Users.vue").default
     },
-   {
+    {
+        path: "/roles",
+        component: require("./components/Pages/admin/User/roles.vue").default
+    },
+    {
         path: "/roles",
         component: require("./components/Pages/admin/User/roles.vue").default
     },

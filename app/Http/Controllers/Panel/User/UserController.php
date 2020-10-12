@@ -58,6 +58,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+
+        if ($request->hasFile('thumbnail')) {
+        dd("hello");
+        }
+        // single_image_upload($request,'/images/test','Test');
+        // dd($request->thumbnail);
+        return $request;
     }
 
     /**

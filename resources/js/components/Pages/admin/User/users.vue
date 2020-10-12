@@ -323,6 +323,21 @@
                     </div>
                     <b-form @submit="onSubmit" v-if="show">
                         <div class="modal-body">
+                              <b-form-group
+                                id="input-group-1"
+                                label=""
+                                label-for="input-1"
+                            >
+                                <FormulateInput
+                                    type="image"
+                                    name="thumbnail"
+                                    id="thumbnail"
+                                    label="User Thumbnail"
+
+                                    help="Select a png, jpg or gif to upload."
+                                    validation="mime:image/jpeg,image/png,image/gif"
+                                />
+                            </b-form-group>
                             <b-form-group
                                 id="input-group-1"
                                 label="User Name"
@@ -336,24 +351,13 @@
                                     placeholder="Enter name"
                                 ></b-form-input>
                             </b-form-group>
-                            <b-form-group
-                                id="input-group-1"
-                                label="Category Thumbnail"
-                                label-for="input-1"
-                            >
-                                <FormulateInput
-                                    type="image"
-                                    name="headshot"
-                                    label="Select an image to upload"
-                                    help="Select a png, jpg or gif to upload."
-                                    validation="mime:image/jpeg,image/png,image/gif"
-                                />
-                            </b-form-group>
+
                             <b-form-group
                                 id="input-group-1"
                                 label="User Role"
                                 label-for="input-1"
                             >
+                            <multiselect v-model="value" :options="options"></multiselect>
                             </b-form-group>
                         </div>
                         <div class="modal-footer">
@@ -387,6 +391,8 @@ export default {
     plugins: ["~/plugins/vue-formulate"],
     data() {
         return {
+            value: null,
+          options: ['list', 'of', 'options'],
             is_editmode: false,
             is_dataload: false,
             query: "",
@@ -451,7 +457,7 @@ export default {
             axios
                 .get(
                     this.$host_apiurl +
-                        "/users/all?page=" +
+                        "/user/all?page=" +
                         page +
                         "&token=" +
                         this.auth_user.api_token
@@ -475,7 +481,7 @@ export default {
                     axios
                         .get(
                             this.$host_apiurl +
-                                "/users/delete/" +
+                                "/user/delete/" +
                                 item.id +
                                 "?token=" +
                                 this.auth_user.api_token
@@ -505,12 +511,13 @@ export default {
             frmdata.append("name", this.form.name);
             frmdata.append("id", this.edit_id);
             frmdata.append("des", this.form.des);
-            frmdata.append("thumbnail", this.form.thumbnail);
+
+            frmdata.append("thumbnail", document.getElementById('thumbnail').value);
             if (!this.is_editmode) {
                 axios
                     .post(
                         this.$host_apiurl +
-                            "/users/store?token=" +
+                            "/user/store?token=" +
                             this.auth_user.api_token,
                         frmdata
                     )
@@ -539,7 +546,7 @@ export default {
                 axios
                     .post(
                         this.$host_apiurl +
-                            "/users/update?token=" +
+                            "/user/update?token=" +
                             this.auth_user.api_token,
                         frmdata
                     )
@@ -579,3 +586,7 @@ export default {
     }
 };
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style lang="scss">
+@import './node_modules/@braid/vue-formulate/themes/snow/snow.scss';
+</style>

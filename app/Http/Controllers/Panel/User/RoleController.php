@@ -61,5 +61,35 @@ class RoleController extends Controller
                 return abort(401);
             }
 }
+
+public function update(Request $request){
+    if($this->verifed){
+   $this->validate($request,[
+       'name'=>'required'
+   ]);
+$duplicate=Role::where('name',$request->name)->get();
+             if($duplicate->count()>0)
+               return response()->json(['status'=>'This record already exsits'],422);
+   Role::where('id',$request->id)->update([
+       'name'=>$request->name
+   ]);
+
+      return response()->json();
+       }
+      else {
+           return abort(401);
+       }
+   }
+
+   public function delete(Request $request){
+       if($this->verifed){
+       $role=Role::where('id',$request->id)->delete();
+       return response()->json();
+   }
+  else {
+       return abort(401);
+   }
+   }
+
     }
 

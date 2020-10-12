@@ -157,7 +157,7 @@
                                                     "
                                                 >
                                                     <vue-initials-img
-                                                     style="width: 40px"
+                                                     style="width: 50px; "
                                                         :name="item.name"
                                                     />
                                                 </p>
@@ -436,7 +436,7 @@ export default {
                     axios
                         .get(
                             this.$host_apiurl +
-                                "/user/delete/" +
+                                "/role/delete/" +
                                 item.id +
                                 "?token=" +
                                 this.auth_user.api_token
@@ -500,7 +500,7 @@ export default {
                 axios
                     .post(
                         this.$host_apiurl +
-                            "/users/update?token=" +
+                            "/role/update?token=" +
                             this.auth_user.api_token,
                         frmdata
                     )

@@ -11,6 +11,7 @@
 |
 */
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\DashboardController;
 
@@ -19,14 +20,11 @@ use App\Http\Controllers\DashboardController;
 
 Auth::routes();
 
-Route::get('/home', function(){
-return redirect('/dashboard');
-})->name('home');
+Route::get('/home',[HomeController::class,'index']);
 
 
-
-Route::get('/',[SiteController::class,'index']);
-
+// Route::get('/',[SiteController::class,'index']);
+Route::get('/',[HomeController::class,'index']);
 Route::group([
     'prefix' => 'dashboard',
     // 'where' => ['lang' => '(fr|de|en)'],

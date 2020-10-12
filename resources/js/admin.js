@@ -13,10 +13,16 @@ import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import VueInitialsImg from "vue-initials-img";
 import Swal from "sweetalert2";
 import VueContentPlaceholders from "vue-content-placeholders";
+import Multiselect from 'vue-multiselect'
+import VueFormulate from '@braid/vue-formulate'
 
 Vue.component("pagination", require("laravel-vue-pagination"));
+// register globally
+Vue.component('multiselect', Multiselect)
 
-// window._ = require("lodash");
+
+Vue.use(VueFormulate)
+    // window._ = require("lodash");
 
 window._ = require("lodash");
 window.Swal = Swal;
