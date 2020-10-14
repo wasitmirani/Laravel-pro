@@ -13,20 +13,19 @@ class CategoryController extends Controller
     private $verifed=false;
      public function __construct()
     {
-         $token=request('token');
-             if(!empty($token) )
-             {
-                    $check_user=User::where('api_token',$token)->first();
-                     if($check_user){
-                        $this->verifed=true;
-                    }
+        //  $token=request('token');
+        //      if(!empty($token) )
+        //      {
+        //             $check_user=User::where('api_token',$token)->first();
+        //              if($check_user){
+        //                 $this->verifed=true;
+        //             }
 
-             }
-             else {
-                 return abort(401);
-             }
-
-
+        //      }
+        //      else {
+        //          return abort(401);
+        //      }
+        $this->middleware('api_middleware');
 
 
     }

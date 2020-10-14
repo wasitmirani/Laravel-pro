@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Panel\User\RoleController;
 use App\Http\Controllers\Panel\User\UserController;
+use App\Http\Controllers\Api\User\UserAuthController;
 use App\Http\Controllers\Panel\Category\CategoryController;
 use App\Http\Controllers\Panel\Category\SubCategoryController;
 
@@ -17,6 +18,17 @@ use App\Http\Controllers\Panel\Category\SubCategoryController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+//Mobile Side Api
+Route::post('/user/login',[UserAuthController::class,'login']);
+;
+
+Route::middleware(["auth:sanctum"])->group(function () {
+  Route::get("/users", [UserAuthController::class,'index']);
+});
+
+//
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -64,4 +76,3 @@ Route::get("/delete/{id}",[RoleController::class,'delete']);
 Route::get('/filter',[RoleController::class,'filter']);
 
 });
-
